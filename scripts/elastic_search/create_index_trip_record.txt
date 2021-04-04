@@ -1,0 +1,52 @@
+PUT trip_record?include_type_name=true
+{
+  "settings": {
+    "number_of_shards": 10,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "trip_record": {
+      "properties": {
+        "vendor_type": {
+          "type": "integer"
+        },
+        "passenger_count": {
+          "type": "integer"
+        },
+        "trip_distance": {
+          "type": "double"
+        },
+        "total_amount": {
+          "type": "double"
+        },
+        "pick_up_time": {
+          "type": "date"
+        },
+        "drop_off_time": {
+          "type": "date"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "pick_up_location_id": {
+          "type": "integer"
+        },
+        "pick_up_location_borough": {
+          "type": "keyword"
+        },
+        "pick_up_location": {
+          "type": "geo_point"
+        },
+        "drop_off_location_id": {
+          "type": "integer"
+        },
+        "drop_off_location_borough": {
+          "type": "keyword"
+        },
+        "drop_off_location": {
+          "type": "geo_point"
+        }
+      }
+    }
+  }
+}
