@@ -85,6 +85,7 @@ public class StreamProducer {
 				latestTime = tripBufferedWriter.fillQueue();
 				System.out.println("NEWEST TIME " + latestTime + " LEFT: " + tripReader.left());
 				if (latestTime > esTimeStamp + 600) {
+					System.out.println("Deleted ES TimeStamp" + (latestTime - 86400 * 7) * 1000);
 					esClient.deleteByQueryAsync(
 							new DeleteByQueryRequest("trip_record").setQuery(
 									new RangeQueryBuilder("pick_up_time").lt((latestTime - 86400 * 7) * 1000)),
