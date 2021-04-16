@@ -109,6 +109,7 @@ class RecentView(RecentAggView):
         field_1, agg = self.bucket(agg, agg_field_1)
         field_2, agg = self.bucket(agg, agg_field_2)
 
+        print(field_1, field_2)
         if calculate:
             agg.metric_avg(calculate)
         print(agg.extract_result(True))
