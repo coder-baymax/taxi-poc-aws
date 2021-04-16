@@ -64,6 +64,10 @@ class EsAggBuilder:
         self.aggs.metric(metric_mane, "min", field=field, **kwargs)
         return self
 
+    def metric_avg(self, field, metric_name="avg", **kwargs):
+        self.aggs.metric(metric_name, 'avg', field=field, **kwargs)
+        return self
+
     def get_search(self):
         if self.search is None:
             if self.root_builder is not None:

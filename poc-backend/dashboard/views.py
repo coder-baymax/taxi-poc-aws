@@ -90,12 +90,14 @@ class RecentAggView(AggBaseView):
 class RecentView(RecentAggView):
 
     def bucket(self, agg, field_info):
+        if not field_info:
+            return None, agg
         field = field_info["field"]
         interval = field_info.get("interval")
         if interval:
-            return agg.bucket_date_histogram()
+            return field, agg.bucket_date_histogram(interval, field)
         else:
-            return agg.bucket_terms(field)
+            return field, agg.bucket_terms(field)
 
     @parsed_view
     def post(self, agg_field_1, agg_field_2, calculate, **kwargs):
@@ -104,9 +106,12 @@ class RecentView(RecentAggView):
 
         if not agg_field_1 or not agg_field_1.get("field"):
             raise MessageException("you must choose first aggregation field")
-        agg = self.bucket(agg, agg_field_1)
-        if agg_field_2:
-            agg = self.bucket(agg, agg_field_2)
+        field_1, agg = self.bucket(agg, agg_field_1)
+        field_2, agg = self.bucket(agg, agg_field_2)
+
+        if calculate:
+            agg.metric_avg(calculate)
+        print(agg.extract_result(True))
 
         return JsonResponse({}, encoder=TimestampEncoder)
 
