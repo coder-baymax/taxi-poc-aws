@@ -42,6 +42,16 @@ class EsAggBuilder:
             self.aggs = self.search.aggs
             self.root_builder = None
 
+    def bucket_terms(self, field, bucket_name="terms", size=0x7FFFFFFF, **kwargs):
+        return self.__class__(self.aggs.bucket(
+            bucket_name, "terms", field=field, size=size, **kwargs
+        ), True, self.root_builder or self)
+
+    def bucket_date_histogram(self, period, field="ctime", bucket_name="timeline", **kwargs):
+        return self.__class__(self.aggs.bucket(
+            bucket_name, "date_histogram", field=field, interval=period, format="yyyy-MM-dd", **kwargs
+        ), True, self.root_builder or self)
+
     def metric_terms(self, field, metric_name="terms_values", size=0xffffff, **kwargs):
         self.aggs.metric(metric_name, "terms", field=field, size=size, **kwargs)
         return self
