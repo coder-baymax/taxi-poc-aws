@@ -20,9 +20,8 @@ def gen_ant(features):
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    lat,
                     lng,
-                    0.0
+                    lat
                 ]
             }
         }
