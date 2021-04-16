@@ -19,3 +19,21 @@ class TripRecord(Document):
     class Index:
         name = "trip_record"
         using = "default"
+
+
+class DayCounter(Document):
+    timestamp = Date()
+    vendor_type = Integer()
+    location_id = Integer()
+    location_borough = Keyword()
+    amount_level = Keyword()
+    distance_level = Keyword()
+    amount_total = Double()
+    amount_count = Integer()
+    distance_total = Double()
+    distance_count = Integer()
+    record_count = Integer()
+
+    class Index:
+        name = "day_counter"
+        using = "default"

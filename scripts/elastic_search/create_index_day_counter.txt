@@ -1,0 +1,46 @@
+PUT day_counter?include_type_name=true
+{
+  "settings": {
+    "number_of_shards": 10,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "day_counter": {
+      "properties": {
+        "timestamp": {
+          "type": "date"
+        },
+        "vendor_type": {
+          "type": "integer"
+        },
+        "location_id": {
+          "type": "integer"
+        },
+        "location_borough": {
+          "type": "keyword"
+        },
+        "amount_level": {
+          "type": "keyword"
+        },
+        "distance_level": {
+          "type": "keyword"
+        },
+        "amount_total": {
+          "type": "double"
+        },
+        "amount_count": {
+          "type": "integer"
+        },
+        "distance_total": {
+          "type": "double"
+        },
+        "distance_count": {
+          "type": "integer"
+        },
+        "record_count": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
