@@ -6,12 +6,13 @@ from elasticsearch_dsl import Document, Date, Keyword, Integer, Double
 from elasticsearch_dsl.connections import connections
 
 # for local test
-input_path = "/home/yunfei/aws/agg_result"
-es_host = "http://localhost:19200/"
+# input_path = "/home/yunfei/aws/agg_result"
+# es_host = "http://localhost:19200/"
 
 
 # for s3 pre-treatment
-# input_path = "s3://taxi-poc-batch-record/"
+input_path = "/home/ubuntu/agg_result"
+es_host = "https://search-aws-taxi-poc-cntkqynq3uyadf3kmmrl5dnnje.us-east-1.es.amazonaws.com/"
 
 
 class DayCounter(Document):
