@@ -4,17 +4,17 @@ import time
 from datetime import datetime
 
 from elasticsearch import helpers
-from elasticsearch_dsl import Document, Date, Keyword, Integer, Double
+from elasticsearch_dsl import Document, Date, Keyword, Integer, Double, Q
 from elasticsearch_dsl.connections import connections
 
 # for local test
-# input_path = "/home/yunfei/aws/agg_result"
-# es_host = "http://localhost:19200/"
+input_path = "/home/yunfei/aws/agg_result"
+es_host = "http://localhost:19200/"
 
 
 # for s3 pre-treatment
-input_path = "/home/ubuntu/agg_result"
-es_host = "https://search-aws-taxi-poc-cntkqynq3uyadf3kmmrl5dnnje.us-east-1.es.amazonaws.com/"
+# input_path = "/home/ubuntu/agg_result"
+# es_host = "https://search-aws-taxi-poc-cntkqynq3uyadf3kmmrl5dnnje.us-east-1.es.amazonaws.com/"
 
 
 class DayCounter(Document):
@@ -39,9 +39,17 @@ def write_agg_result_to_es():
     connections.configure(default={"hosts": [es_host], "timeout": 60})
     DayCounter.init()
 
+    start_month = "2012-08"
+    if start_month:
+        timestamp = int(datetime.strptime(start_month, "%Y-%m").timestamp() * 1000)
+        print(timestamp)
+        print(DayCounter.search().query(Q("range", timestamp={"gte": timestamp})).delete())
+
     for year in range(2009, 2021):
         for month in range(1, 13):
             month_str = "%d-%02d" % (year, month)
+            if month_str < start_month:
+                continue
             print(f"START {month_str}")
             bulk_list = []
             for day in range(1, 32):
