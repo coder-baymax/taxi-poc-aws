@@ -36,7 +36,7 @@ class DayCounter(Document):
 
 
 def write_agg_result_to_es():
-    connections.configure(default={"hosts": [es_host], "timeout": 20})
+    connections.configure(default={"hosts": [es_host], "timeout": 60})
     DayCounter.init()
 
     for year in range(2009, 2021):
@@ -53,7 +53,6 @@ def write_agg_result_to_es():
                     for line in f.readlines():
                         bulk_list.append(DayCounter(**json.loads(line)).to_dict(include_meta=True))
             helpers.bulk(connections.get_connection(), bulk_list, chunk_size=5000, request_timeout=60)
-            time.sleep(1)
             print(datetime.now())
 
 
