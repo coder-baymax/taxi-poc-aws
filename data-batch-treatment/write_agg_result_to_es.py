@@ -1,5 +1,7 @@
 import json
 import os
+import time
+from datetime import datetime
 
 from elasticsearch import helpers
 from elasticsearch_dsl import Document, Date, Keyword, Integer, Double
@@ -40,6 +42,7 @@ def write_agg_result_to_es():
     for year in range(2009, 2021):
         for month in range(1, 13):
             month_str = "%d-%02d" % (year, month)
+            print(f"START {month_str}")
             bulk_list = []
             for day in range(1, 32):
                 date_str = "%s-%02d" % (month_str, day)
@@ -49,7 +52,9 @@ def write_agg_result_to_es():
                 with open(filename, "r") as f:
                     for line in f.readlines():
                         bulk_list.append(DayCounter(**json.loads(line)).to_dict(include_meta=True))
-            helpers.bulk(connections.get_connection(), bulk_list, chunk_size=1000, request_timeout=60)
+            helpers.bulk(connections.get_connection(), bulk_list, chunk_size=5000, request_timeout=60)
+            time.sleep(1)
+            print(datetime.now())
 
 
 if __name__ == '__main__':
