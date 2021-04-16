@@ -65,8 +65,8 @@ public class StreamProducer {
 			StreamProducer producer = new StreamProducer(line.getOptionValue("streamRegion", DEFAULT_REGION_NAME),
 					line.getOptionValue("streamName", "taxi-poc-input"),
 					line.getOptionValue("bucketName", "taxi-poc-formatted"),
-					line.getOptionValue("startMonth", "2018-04"),
-					Float.parseFloat(line.getOptionValue("speed", "100")));
+					line.getOptionValue("startMonth", "2018-05"),
+					Float.parseFloat(line.getOptionValue("speed", "50")));
 
 			producer.produce();
 		}

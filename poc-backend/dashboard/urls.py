@@ -4,7 +4,7 @@ from dashboard.views import RecentAggView, RecentView, HistoryAggView, HistoryVi
 
 urlpatterns = [
     url(r"^recent/agg$", RecentAggView.as_view()),
-    url(r"^recent$", RecentView.as_view()),
+    url(r"^recent/view$", RecentView.as_view()),
     url(r"^history/agg$", HistoryAggView.as_view()),
-    url(r"^history$", HistoryView.as_view()),
+    url(r"^history/view$", HistoryView.as_view()),
 ]
