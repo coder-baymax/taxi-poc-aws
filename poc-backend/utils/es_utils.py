@@ -52,7 +52,7 @@ class EsAggBuilder:
             bucket_name, "date_histogram", field=field, calendar_interval=period, **kwargs
         ), True, self.root_builder or self)
 
-    def metric_terms(self, field, metric_name="terms_values", size=0xffffff, **kwargs):
+    def metric_terms(self, field, metric_name="terms_values", size=0x7FFFFFFF, **kwargs):
         self.aggs.metric(metric_name, "terms", field=field, size=size, **kwargs)
         return self
 

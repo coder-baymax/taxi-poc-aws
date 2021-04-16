@@ -48,17 +48,19 @@ class AggBaseView(View):
 
     def gen_agg(self, **kwargs):
         query = self.gen_query(**kwargs)
-        agg = EsAggBuilder(TripRecord.search().filter(query) if query else TripRecord.search())
-        for field in self.MAX_MIN_FIELDS:
-            self.gen_min_max(agg, field)
-        for field in self.TERMS_FIELDS:
-            self.gen_terms(agg, field)
-        return agg
+        return EsAggBuilder(TripRecord.search().filter(query) if query else TripRecord.search())
 
     @parsed_view
     def post(self, **kwargs):
         agg_result = {}
-        for key, value in self.gen_agg(**kwargs).extract_result(True).items():
+
+        agg = self.gen_agg(**kwargs)
+        for field in self.MAX_MIN_FIELDS:
+            self.gen_min_max(agg, field)
+        for field in self.TERMS_FIELDS:
+            self.gen_terms(agg, field)
+
+        for key, value in agg.extract_result(True).items():
             key, tail = key.rsplit("_", 1)
             if key not in agg_result:
                 agg_result[key] = {}
@@ -95,9 +97,10 @@ class RecentView(RecentAggView):
         field = field_info["field"]
         interval = field_info.get("interval")
         if interval:
-            return field, agg.bucket_date_histogram(interval, field)
+            agg.bucket_date_histogram(interval, field)
         else:
-            return field, agg.bucket_terms(field)
+            agg.bucket_terms(field)
+        return field
 
     @parsed_view
     def post(self, agg_field_1, agg_field_2, calculate, **kwargs):
@@ -106,8 +109,8 @@ class RecentView(RecentAggView):
 
         if not agg_field_1 or not agg_field_1.get("field"):
             raise MessageException("you must choose first aggregation field")
-        field_1, agg = self.bucket(agg, agg_field_1)
-        field_2, agg = self.bucket(agg, agg_field_2)
+        field_1 = self.bucket(agg, agg_field_1)
+        field_2 = self.bucket(agg, agg_field_2)
 
         print(field_1, field_2)
         if calculate:
