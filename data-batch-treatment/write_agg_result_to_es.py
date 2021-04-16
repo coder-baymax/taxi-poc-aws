@@ -49,7 +49,7 @@ def write_agg_result_to_es():
                 with open(filename, "r") as f:
                     for line in f.readlines():
                         bulk_list.append(DayCounter(**json.loads(line)).to_dict(include_meta=True))
-            helpers.bulk(connections.get_connection(), bulk_list)
+            helpers.bulk(connections.get_connection(), bulk_list, chunk_size=1000, request_timeout=60)
 
 
 if __name__ == '__main__':
