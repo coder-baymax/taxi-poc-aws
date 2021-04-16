@@ -96,6 +96,7 @@ class RecentView(RecentAggView):
         if not agg_field_1:
             raise MessageException("you must choose first aggregation field")
 
+
         return JsonResponse({}, encoder=TimestampEncoder)
 
 

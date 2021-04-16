@@ -39,7 +39,7 @@ def write_agg_result_to_es():
     connections.configure(default={"hosts": [es_host], "timeout": 60})
     DayCounter.init()
 
-    start_month = "2008-08"
+    start_month = "2010-03"
     if start_month:
         timestamp = int(datetime.strptime(start_month, "%Y-%m").timestamp() * 1000)
         print(timestamp)
