@@ -89,7 +89,7 @@ class BaseHistory(View):
         for item in value_list:
             if item["key"] == "NA":
                 na_item.append(item)
-            elif item["key"].startswith("<"):
+            elif isinstance(item["key"], str) and item["key"].startswith("<"):
                 min_item.append(item)
             else:
                 other_item.append(item)
