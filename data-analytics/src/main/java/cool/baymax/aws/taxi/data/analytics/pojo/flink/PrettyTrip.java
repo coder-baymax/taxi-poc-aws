@@ -20,6 +20,7 @@ public class PrettyTrip {
 	public Long pickUpTime;
 	public Long dropOffTime;
 	public long duration;
+	public Double speed;
 	public Integer pickUpLocationId;
 	public String pickUpLocationBorough;
 	public String pickUpLocation;
@@ -36,6 +37,7 @@ public class PrettyTrip {
 		pretty.pickUpTime = Instant.now().toEpochMilli();
 		pretty.dropOffTime = Instant.now().toEpochMilli();
 		pretty.duration = 10L;
+		pretty.speed = 10.2;
 		pretty.pickUpLocationId = 20;
 		pretty.pickUpLocationBorough = "borough";
 		pretty.pickUpLocation = "40.8972233, -73.8860668";

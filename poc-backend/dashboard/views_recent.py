@@ -22,6 +22,7 @@ class RecentMixIn:
         "trip_distance",
         "total_amount",
         "duration",
+        "speed"
     ]
     TERMS_FIELDS = [
         "vendor_type",
@@ -36,7 +37,8 @@ class RecentMixIn:
         "drop_off_time": "下车时间",
         "trip_distance": "车程",
         "total_amount": "总费用",
-        "duration": "行驶时间(秒)",
+        "duration": "行驶时间(s)",
+        "speed": "平均时速(km/h)",
         "vendor_type": "服务类型",
         "passenger_count": "乘客数量",
         "pick_up_location_borough": "上车区",

@@ -21,6 +21,9 @@ public class PrettyTripUtils {
 		if (record.pickUpTime != null && record.dropOffTime != null) {
 			pretty.duration = record.dropOffTime.getEpochSecond() - record.pickUpTime.getEpochSecond();
 		}
+		if (pretty.duration != 0 && pretty.tripDistance != null) {
+			pretty.speed = pretty.tripDistance * 3600 / pretty.duration;
+		}
 		if (GeoUtils.validCoordinates(record.pickUpLat, record.pickUpLng)) {
 			Location location = Location.getClosest(record.pickUpLat, record.pickUpLng);
 			pretty.pickUpLocationId = location.locationId;

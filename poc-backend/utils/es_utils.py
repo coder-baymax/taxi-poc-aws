@@ -91,7 +91,6 @@ class EsAggBuilder:
         return self.get_search().execute()
 
     def extract_result(self, need_count=False):
-        print(self.get_search().to_dict())
         result = self.execute().to_dict()
         return [] if 'aggregations' not in result else \
             loads_buckets_result(result.get('aggregations', {}), need_count)

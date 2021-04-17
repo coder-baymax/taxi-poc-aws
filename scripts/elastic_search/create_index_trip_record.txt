@@ -28,6 +28,9 @@ PUT trip_record?include_type_name=true
         "duration": {
           "type": "long"
         },
+        "speed": {
+          "type": "double"
+        },
         "pick_up_location_id": {
           "type": "integer"
         },

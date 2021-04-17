@@ -282,7 +282,6 @@ class HistoryView(BaseHistory):
                     self.format_term(single)
             else:
                 self.format_term(row)
-        print(agg_result)
 
         if agg_type == "terms":
             self.add_term_names(field_1, agg_result)
