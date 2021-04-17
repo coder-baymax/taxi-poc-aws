@@ -106,7 +106,7 @@ class HistoryAggView(BaseHistory):
     def get_agg_result(self, **kwargs):
         agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items()}
         for key, value in agg_result.items():
-            value["file_type"] = "date" if key in self.DATE_FIELDS else "terms"
+            value["field_type"] = "date" if key in self.DATE_FIELDS else "terms"
 
         agg = self.gen_agg(**kwargs)
         for field in self.DATE_FIELDS:
