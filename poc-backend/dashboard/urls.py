@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from dashboard.views import RecentAggView, RecentView, HistoryAggView, HistoryView
+from dashboard.views_recent import RecentAggView, RecentView
+from dashboard.views_history import HistoryAggView, HistoryView
 
 urlpatterns = [
     url(r"^recent/agg$", RecentAggView.as_view()),

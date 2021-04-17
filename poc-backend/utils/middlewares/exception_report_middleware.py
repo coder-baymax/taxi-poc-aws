@@ -15,7 +15,7 @@ class ExceptionReportMiddleware(object):
         return response
 
     def process_exception(self, request, exception):
-        msg = "Ops! You found an unhandled exception!"
+        msg = "服务器发生了一个未捕获的异常，喊后端来查bug"
         if hasattr(exception, "message"):
             msg = exception.message
         stack_info = traceback.format_exc()

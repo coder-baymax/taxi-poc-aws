@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
 
-from realtime.locations import Locations
+from utils.locations import LOCATIONS
 from utils.geo_hash import GeoHash
 from utils.parsed_view import parsed_view
 from utils.timestamp_encoder import TimestampEncoder
@@ -89,7 +89,7 @@ class DriverCountAntView(DriverCountView):
 class LocationsView(View):
     @parsed_view
     def post(self):
-        return JsonResponse({"locations": [x.json for x in Locations]}, encoder=TimestampEncoder)
+        return JsonResponse({"locations": [x.json for x in LOCATIONS]}, encoder=TimestampEncoder)
 
 
 class OperatorCountView(View):
@@ -106,9 +106,9 @@ class OperatorCountView(View):
         now_max_time = 0
         for data_type, header in self.HEADER_MAPPING.items():
             counter_dict[data_type] = []
-            keys = [f"{header}&&{x.location_id}" for x in Locations]
+            keys = [f"{header}&&{x.location_id}" for x in LOCATIONS]
             for i, item in (x for x in enumerate(r.mget(keys)) if x[-1]):
-                location = Locations[i]
+                location = LOCATIONS[i]
                 count, timestamp = item.split('&&')
                 counter_dict[data_type].append({
                     "count": float(count), "timestamp": int(timestamp), **location.json

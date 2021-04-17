@@ -23,7 +23,7 @@ class UserLogin(View):
 
         user = User.objects.auth(username, password)
         if user is None:
-            raise MessageException("Username or password is wrong!")
+            raise MessageException("用户名或密码输入错误")
 
         self.login_session_save(session, user)
         return JsonResponse(user.json, encoder=TimestampEncoder)

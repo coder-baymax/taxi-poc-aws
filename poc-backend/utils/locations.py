@@ -18,7 +18,7 @@ class Location:
         }
 
 
-Locations = [
+LOCATIONS = [
     Location(1, "EWR", "Newark Airport", 40.6895314, -74.1744624),
     Location(2, "Queens", "Jamaica Bay", 40.6056632, -73.8713099),
     Location(3, "Bronx", "Allerton/Pelham Gardens", 40.8627726, -73.84343919999999),
@@ -283,3 +283,6 @@ Locations = [
     Location(262, "Manhattan", "Yorkville East", 40.7762231, -73.94920789999999),
     Location(263, "Manhattan", "Yorkville West", 40.7762231, -73.94920789999999)
 ]
+
+
+LOCATION_DICT = {x.location_id: x for x in LOCATIONS}

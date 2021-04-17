@@ -4,7 +4,7 @@ def loads_buckets_result(result, need_count=False):
         for key, value in result.items():
             if 'buckets' in value:
                 new_result[key] = loads_buckets_result(result[key], need_count)
-            else:
+            elif 'value' in value:
                 new_result[key] = value
         return new_result
     else:
@@ -28,15 +28,11 @@ def loads_buckets_result(result, need_count=False):
 
 class EsAggBuilder:
 
-    def __init__(self, search_or_bucket, is_bucket=False, root_builder=None):
+    def __init__(self, search_or_bucket, root_builder=None):
         if root_builder is not None:
             self.search = None
             self.aggs = search_or_bucket
             self.root_builder = root_builder
-        elif is_bucket:
-            self.search = None
-            self.aggs = search_or_bucket
-            self.root_builder = None
         else:
             self.search = search_or_bucket.extra(size=0)
             self.aggs = self.search.aggs
@@ -45,12 +41,22 @@ class EsAggBuilder:
     def bucket_terms(self, field, bucket_name="terms", size=0x7FFFFFFF, **kwargs):
         return self.__class__(self.aggs.bucket(
             bucket_name, "terms", field=field, size=size, **kwargs
-        ), True, self.root_builder or self)
+        ), self.root_builder or self)
 
-    def bucket_date_histogram(self, period, field="ctime", bucket_name="timeline", **kwargs):
+    def bucket_calendar_histogram(self, period, field="ctime", bucket_name="timeline", **kwargs):
         return self.__class__(self.aggs.bucket(
             bucket_name, "date_histogram", field=field, calendar_interval=period, **kwargs
-        ), True, self.root_builder or self)
+        ), self.root_builder or self)
+
+    def bucket_fixed_histogram(self, period, field="ctime", bucket_name="timeline", **kwargs):
+        return self.__class__(self.aggs.bucket(
+            bucket_name, "date_histogram", field=field, fixed_interval=period, **kwargs
+        ), self.root_builder or self)
+
+    def bucket_histogram(self, period, field="money", bucket_name="histogram", **kwargs):
+        return self.__class__(self.aggs.bucket(
+            bucket_name, "histogram", field=field, interval=period, **kwargs
+        ), self.root_builder or self)
 
     def metric_terms(self, field, metric_name="terms_values", size=0x7FFFFFFF, **kwargs):
         self.aggs.metric(metric_name, "terms", field=field, size=size, **kwargs)
@@ -68,6 +74,10 @@ class EsAggBuilder:
         self.aggs.metric(metric_name, 'avg', field=field, **kwargs)
         return self
 
+    def metric_sum(self, field, metric_name="sum", **kwargs):
+        self.aggs.metric(metric_name, 'sum', field=field, **kwargs)
+        return self
+
     def get_search(self):
         if self.search is None:
             if self.root_builder is not None:
@@ -81,6 +91,7 @@ class EsAggBuilder:
         return self.get_search().execute()
 
     def extract_result(self, need_count=False):
+        print(self.get_search().to_dict())
         result = self.execute().to_dict()
         return [] if 'aggregations' not in result else \
             loads_buckets_result(result.get('aggregations', {}), need_count)
