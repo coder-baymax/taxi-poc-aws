@@ -59,7 +59,8 @@ class AggBaseView(View):
         "doc_count": "打车次数",
         "trip_distance__avg": "平均车程",
         "total_amount__avg": "平均费用",
-        "duration__avg": "平均时间(秒)",
+        "duration__avg": "平均时间(s)",
+        "speed__avg": "平均速度(km/h)"
     }
 
     def gen_query(self, **kwargs):
