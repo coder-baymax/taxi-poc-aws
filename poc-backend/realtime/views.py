@@ -47,7 +47,7 @@ class DriverCountView(View):
 
     def get_counter(self, lat, lng):
         geo_bits = GeoHash.from_lat_lng(lat, lng, 32).bits >> 32
-        geo_range = geo_bits - (1 << 11), geo_bits + (1 << 11)
+        geo_range = geo_bits - (1 << 12), geo_bits + (1 << 12)
         r = redis.Redis(connection_pool=settings.REDIS_POOL)
 
         geo_hash_list = r.zrangebyscore("driver_locations", *geo_range)
