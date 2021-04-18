@@ -67,13 +67,12 @@ class AggBaseView(View):
         terms = {}
         ranges = defaultdict(lambda: {})
         for key, value in kwargs.items():
-            split = key.split("__")
-            if len(split) == 1:
+            if isinstance(value, list):
+                gte, lte = value
+                ranges[key]["gte"] = gte
+                ranges[key]["lte"] = lte
+            else:
                 terms[key] = value
-            elif len(split) == 2:
-                key, tail = split
-                tail = "lte" if tail == "max" else "gte"
-                ranges[key][tail] = value
 
         query = None
         for key, value in terms.items():
