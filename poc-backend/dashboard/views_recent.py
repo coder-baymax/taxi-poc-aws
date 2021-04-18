@@ -13,7 +13,7 @@ from utils.parsed_view import parsed_view
 from utils.timestamp_encoder import TimestampEncoder
 
 
-class RecentMixIn:
+class AggBaseView(View):
     DATE_FIELDS = [
         "pick_up_time",
         "drop_off_time",
@@ -46,7 +46,7 @@ class RecentMixIn:
         "pick_up_location_id": "上车地点",
         "drop_off_location_id": "下车地点",
     }
-    NAMES = {
+    FIELD_NAMES = {
         "doc_count": "打车次数",
         **FIELD_NAME_DICT
     }
@@ -57,8 +57,6 @@ class RecentMixIn:
     }
     SEARCH = TripRecord.search
 
-
-class AggBaseView(View):
     TITLE_DICT = {
         "doc_count": "打车次数",
         "trip_distance__avg": "平均车程",
@@ -131,10 +129,10 @@ class AggBaseView(View):
 
     def replace_type_names(self, data):
         for item in data:
-            item["type"] = self.FIELD_NAME_DICT[item["type"].split("__")[0]]
+            item["type"] = self.FIELD_NAMES[item["type"].split("__")[0]]
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.NAMES.items()}
+        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items()}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "range" if key in self.RANGE_FIELDS else "terms"
 
@@ -269,7 +267,7 @@ class AggBaseView(View):
         return view_result
 
 
-class RecentAggView(RecentMixIn, AggBaseView):
+class RecentAggView(AggBaseView):
 
     @parsed_view
     def post(self, **kwargs):
@@ -277,7 +275,7 @@ class RecentAggView(RecentMixIn, AggBaseView):
         return JsonResponse(agg_result, encoder=TimestampEncoder)
 
 
-class RecentView(RecentMixIn, AggBaseView):
+class RecentView(AggBaseView):
 
     @parsed_view
     def post(self, agg_field_1, agg_field_2, calculate_fields, **kwargs):

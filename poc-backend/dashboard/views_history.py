@@ -33,7 +33,7 @@ class BaseHistory(View):
         "distance_level": "车程",
         "amount_level": "总费用",
     }
-    NAMES = {
+    FIELD_NAMES = {
         "doc_count": "打车次数",
         "trip_distance": "平均车程",
         "total_amount": "平均费用",
@@ -109,7 +109,7 @@ class HistoryAggView(BaseHistory):
         return agg.bucket_terms(field, f"{field}__terms").metric_sum("record_count")
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.NAMES.items()}
+        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items()}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "terms"
 
@@ -162,7 +162,7 @@ class HistoryView(BaseHistory):
 
     def replace_type_names(self, data):
         for item in data:
-            item["type"] = self.FIELD_NAME_DICT[item["type"].split("__")[0]]
+            item["type"] = self.FIELD_NAMES[item["type"].split("__")[0]]
 
     def bucket(self, agg, field_info):
         if not field_info:
