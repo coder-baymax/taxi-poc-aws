@@ -104,7 +104,7 @@ class HistoryAggView(BaseHistory):
         return agg.bucket_terms(field, f"{field}__terms").metric_sum("record_count")
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items()}
+        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items() if k != "doc_count"}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "terms"
 

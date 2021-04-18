@@ -131,7 +131,7 @@ class AggBaseView(View):
             item["type"] = self.FIELD_NAME_DICT[item["type"].split("__")[0]]
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items()}
+        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items() if k != "doc_count"}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "range" if key in self.RANGE_FIELDS else "terms"
 
