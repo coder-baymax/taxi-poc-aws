@@ -26,13 +26,18 @@ class BaseHistory(View):
         "distance_level",
     ]
     FIELD_NAME_DICT = {
-        "doc_count": "打车次数",
         "timestamp": "上车时间",
         "vendor_type": "服务类型",
         "location_borough": "上车区",
         "location_id": "上车地点",
         "distance_level": "车程",
         "amount_level": "总费用",
+    }
+    NAMES = {
+        "doc_count": "打车次数",
+        "trip_distance": "平均车程",
+        "total_amount": "平均费用",
+        **FIELD_NAME_DICT
     }
     FORMAT_DICT = {
         "day": "yyyy-MM-dd",
@@ -104,7 +109,7 @@ class HistoryAggView(BaseHistory):
         return agg.bucket_terms(field, f"{field}__terms").metric_sum("record_count")
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items() if k != "doc_count"}
+        agg_result = {k: {"name": v} for k, v in self.NAMES.items()}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "terms"
 
@@ -165,7 +170,9 @@ class HistoryView(BaseHistory):
         field = field_info["field"]
         interval = field_info.get("interval")
         if field in self.DATE_FIELDS:
-            if interval not in self.FORMAT_DICT:
+            if not interval:
+                raise MessageException(f"必须提供时间周期")
+            elif interval not in self.FORMAT_DICT:
                 raise MessageException(f"选择的时间周期必须是：{self.FORMAT_DICT.keys()}")
             interval_value = field_info.get("interval_value")
             if interval in ("minute", "hour", "day") and interval_value:
@@ -203,7 +210,7 @@ class HistoryView(BaseHistory):
             self.add_column_names(columns)
             data = []
             for row in agg_result:
-                row[field_1] = row['key']
+                row[field_1] = row.get("name") or row['key']
                 data.append(row)
         return columns, self.sort_by_key(data)
 

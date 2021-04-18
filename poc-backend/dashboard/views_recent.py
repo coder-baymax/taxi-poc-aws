@@ -33,7 +33,6 @@ class RecentMixIn:
         "drop_off_location_id",
     ]
     FIELD_NAME_DICT = {
-        "doc_count": "打车次数",
         "pick_up_time": "上车时间",
         "drop_off_time": "下车时间",
         "trip_distance": "车程",
@@ -46,6 +45,10 @@ class RecentMixIn:
         "drop_off_location_borough": "下车区",
         "pick_up_location_id": "上车地点",
         "drop_off_location_id": "下车地点",
+    }
+    NAMES = {
+        "doc_count": "打车次数",
+        **FIELD_NAME_DICT
     }
     FORMAT_DICT = {
         "minute": "yyyy-MM-dd HH:mm",
@@ -131,7 +134,7 @@ class AggBaseView(View):
             item["type"] = self.FIELD_NAME_DICT[item["type"].split("__")[0]]
 
     def get_agg_result(self, **kwargs):
-        agg_result = {k: {"name": v} for k, v in self.FIELD_NAME_DICT.items() if k != "doc_count"}
+        agg_result = {k: {"name": v} for k, v in self.NAMES.items()}
         for key, value in agg_result.items():
             value["field_type"] = "date" if key in self.DATE_FIELDS else "range" if key in self.RANGE_FIELDS else "terms"
 
@@ -156,7 +159,9 @@ class AggBaseView(View):
         field = field_info["field"]
         interval = field_info.get("interval")
         if field in self.DATE_FIELDS:
-            if interval not in self.FORMAT_DICT:
+            if not interval:
+                raise MessageException(f"必须提供时间周期")
+            elif interval not in self.FORMAT_DICT:
                 raise MessageException(f"选择的时间周期必须是：{self.FORMAT_DICT.keys()}")
             interval_value = field_info.get("interval_value")
             if interval_value:
@@ -198,7 +203,7 @@ class AggBaseView(View):
             self.add_column_names(columns)
             data = []
             for row in agg_result:
-                row[field_1] = row['key']
+                row[field_1] = row.get("name") or row['key']
                 data.append(row)
         return columns, data
 
