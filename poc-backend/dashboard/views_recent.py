@@ -33,6 +33,7 @@ class RecentMixIn:
         "drop_off_location_id",
     ]
     FIELD_NAME_DICT = {
+        "doc_count": "打车次数",
         "pick_up_time": "上车时间",
         "drop_off_time": "下车时间",
         "trip_distance": "车程",

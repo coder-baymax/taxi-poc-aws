@@ -38,7 +38,7 @@ class EsAggBuilder:
             self.aggs = self.search.aggs
             self.root_builder = None
 
-    def bucket_terms(self, field, bucket_name="terms", size=0x7FFFFFFF, **kwargs):
+    def bucket_terms(self, field, bucket_name="terms", size=0xFFFFFFF, **kwargs):
         return self.__class__(self.aggs.bucket(
             bucket_name, "terms", field=field, size=size, **kwargs
         ), self.root_builder or self)
@@ -88,6 +88,7 @@ class EsAggBuilder:
             return self.search
 
     def execute(self):
+        print(self.get_search().to_dict())
         return self.get_search().execute()
 
     def extract_result(self, need_count=False):

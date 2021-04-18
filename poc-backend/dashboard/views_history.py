@@ -26,6 +26,7 @@ class BaseHistory(View):
         "distance_level",
     ]
     FIELD_NAME_DICT = {
+        "doc_count": "打车次数",
         "timestamp": "上车时间",
         "vendor_type": "服务类型",
         "location_borough": "上车区",
