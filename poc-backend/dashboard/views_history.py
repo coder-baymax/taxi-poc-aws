@@ -167,9 +167,7 @@ class HistoryView(BaseHistory):
             if interval not in self.FORMAT_DICT:
                 raise MessageException(f"选择的时间周期必须是：{self.FORMAT_DICT.keys()}")
             interval_value = field_info.get("interval_value")
-            if interval_value:
-                if interval not in ("minute", "hour", "day"):
-                    raise MessageException(f"只有在分钟、小时、天的单位下能指定具体聚合时间")
+            if interval in ("minute", "hour", "day") and interval_value:
                 return field, "date", agg.bucket_fixed_histogram(f"{interval_value}{interval[0]}", field, "terms",
                                                                  format=self.FORMAT_DICT[interval])
             else:
