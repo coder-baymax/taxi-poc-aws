@@ -26,4 +26,4 @@ class ExceptionReportMiddleware(object):
             Exception: {exception}
             """
         )
-        return JsonResponse({"msg": msg}, status=417)
+        return JsonResponse({"msg": msg}, status=200)

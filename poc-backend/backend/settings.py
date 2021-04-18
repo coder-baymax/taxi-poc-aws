@@ -135,7 +135,7 @@ REDIS_TIME_KEY = "TAXI-POC-LATEST-TIME"
 
 # ES
 ES_HOST = os.getenv("ES_HOSE", "http://localhost:19200/")
-ES_CONFIG = {"hosts": [ES_HOST], "timeout": 20}
+ES_CONFIG = {"hosts": [ES_HOST], "timeout": 120}
 connections.configure(default=ES_CONFIG)
 
 CACHES = {
