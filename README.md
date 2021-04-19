@@ -47,3 +47,16 @@ Reference: https://github.com/aws-samples/amazon-kinesis-replay.
 
 ### Steps:
 
+- Create a Kinesis data stream named **taxi-poc-trip-record**.
+- Go into data-analytics folder run maven clean package & upload the package to S3.
+- Create a Kinesis data analytics flink application & start with the package.
+
+Now you will get pretty records in **taxi-poc-trip-record**.
+
+- Build an AWS elasticsearch cluster and build index for data-record(in scripts folder)
+- Create a Kinesis firehose application to transfer data. Choose the cluster as target.
+
+
+## Backend & Frontend
+
+Deploy them in VPC at any way you like.
